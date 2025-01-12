@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clock</title>
+    <style>
+        *, *::after, *::before {
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f172a, #1e3a8a);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            color: white;
+        }
+
+        .clock {
+            border: 1px solid rgb(255, 119, 0);
+            width: 320px;
+            height: 320px;
+            background: linear-gradient(145deg, #1e293b, #334155);
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3), inset 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .clock .number {
+            --rotation: 0;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transform: rotate(var(--rotation));
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #cbd5e1;
+        }
+
+        .clock .number1 { --rotation: 30deg; }
+        .clock .number2 { --rotation: 60deg; }
+        .clock .number3 { --rotation: 90deg; }
+        .clock .number4 { --rotation: 120deg; }
+        .clock .number5 { --rotation: 150deg; }
+        .clock .number6 { --rotation: 180deg; }
+        .clock .number7 { --rotation: 210deg; }
+        .clock .number8 { --rotation: 240deg; }
+        .clock .number9 { --rotation: 270deg; }
+        .clock .number10 { --rotation: 300deg; }
+        .clock .number11 { --rotation: 330deg; }
+        .clock .number12 { --rotation: 360deg; }
+
+        .clock .hand {
+            --rotation: 0;
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            border-radius: 4px;
+            transform-origin: bottom;
+            transform: translateX(-50%) rotate(calc(var(--rotation) * 1deg));
+        }
+
+        .clock .hand.second {
+            width: 2px;
+            height: 46%;
+            background: linear-gradient(145deg, #ef4444, #dc2626);
+            z-index: 3;
+        }
+
+        .clock .hand.minute {
+            width: 5px;
+            height: 40%;
+            background: linear-gradient(145deg, #f8fafc, #cbd5e1);
+            z-index: 2;
+        }
+
+        .clock .hand.hour {
+            width: 8px;
+            height: 35%;
+            background: linear-gradient(145deg, #94a3b8, #64748b);
+            z-index: 1;
+        }
+
+        .clock::after {
+            content: '';
+            position: absolute;
+            background: linear-gradient(145deg, #94a3b8, #64748b);
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .clock:hover {
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.5), inset 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="clock">
+        <div class="hand hour hand" data-hour-hand></div>
+        <div class="hand minute hand" data-minute-hand></div>
+        <div class="hand second hand" data-second-hand></div>
+
+        <div class="number number1">1</div>
+        <div class="number number2">2</div>
+        <div class="number number3">3</div>
+        <div class="number number4">4</div>
+        <div class="number number5">5</div>
+        <div class="number number6">6</div>
+        <div class="number number7">7</div>
+        <div class="number number8">8</div>
+        <div class="number number9">9</div>
+        <div class="number number10">10</div>
+        <div class="number number11">11</div>
+        <div class="number number12">12</div>
+    </div>
+
+    <script>
+        // Set the clock to update every second
+        setInterval(setClock, 1000)
+
+        // Selecting the clock hands by their data attributes
+        const hourHand = document.querySelector('[data-hour-hand]')
+        const minuteHand = document.querySelector('[data-minute-hand]')
+        const secondHand = document.querySelector('[data-second-hand]')
+
+        // Function to update the clock hands based on the current time
+        function setClock() {
+            const currentDate = new Date();  // Get the current date and time
+            const secondsRatio = currentDate.getSeconds() / 60;  // Get the current seconds ratio
+            const minutesRatio = (secondsRatio + currentDate.getMinutes()) / 60;  // Get the minutes ratio
+            const hoursRatio = (minutesRatio + currentDate.getHours()) / 12;  // Get the hours ratio
+
+            // Set the rotation of each clock hand based on the calculated ratio
+            setRotation(secondHand, secondsRatio);
+            setRotation(minuteHand, minutesRatio);
+            setRotation(hourHand, hoursRatio);
+        }
+
+        // Function to apply the rotation to each clock hand element
+        function setRotation(element, rotationRatio) {
+            element.style.setProperty('--rotation', rotationRatio * 360)  // Apply the rotation in degrees
+        }
+
+        setClock();  // Initialize the clock immediately when the page loads
+    </script>
+</body>
+</html>
